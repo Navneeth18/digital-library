@@ -3,6 +3,8 @@ const userApp=exp.Router();
 const User = require('../Models/UserModel');
 const expressAsyncHandler = require('express-async-handler');
 const ResourceRequest = require('../Models/ResourceRequestModel'); // Adjust path as needed
+const authenticate = require('../middleware/authenticate');
+
 
 
 // apis
@@ -61,9 +63,24 @@ userApp.post(
       }
   
       const token = user.generateJWT();
-      res.status(200).send({ message: 'Login successful', token });
+  
+      // Remove sensitive info like password from user object
+      const { _id, name, email, role } = user;
+  
+      res.status(200).send({
+        message: 'Login successful',
+        token,
+        user: {
+          _id,
+          userId,
+          name,
+          email,
+          role
+        }
+      });
     })
   );
+  
 
 //   
 userApp.post(
