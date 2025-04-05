@@ -7,9 +7,9 @@ import ResourceCardd from '../components/ResourceCardd'
 function ViewDetails() {
   return (
     <div className="flex min-h-screen bg-black">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        {/* <Navbar /> */}
         <ResourceCardd />
       </div>
     </div>

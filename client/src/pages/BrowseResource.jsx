@@ -84,9 +84,9 @@ function BrowseResource() {
   return (
     <div>
       <div className="flex min-h-screen bg-black">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="flex-1 flex flex-col">
-          <Navbar />
+          {/* <Navbar /> */}
           <BrowseHeader />
           <div className="flex">
             <SidebarWithFilters />

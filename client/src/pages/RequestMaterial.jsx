@@ -8,9 +8,9 @@ import SearchApp from '../components/SearchForm'
 function RequestMaterial() {
   return (
     <div className="flex min-h-screen bg-black">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        {/* <Navbar /> */}
         <RequestHeader />
         <SearchApp />
       </div>

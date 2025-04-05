@@ -8,45 +8,56 @@ const ResourceRequest = require('../Models/ResourceRequestModel'); // Adjust pat
 // apis
 // post : add a new resource
 adminApp.post(
-    '/add',
-    expressAsyncHandler(async (req, res) => {
-        const {
-            title,
-            abstract,
-            content,
-            keywords,
-            authorName,
-            category,
-            resourceType,
-            publisher,
-            access,
-        } = req.body;
+  '/add',
+  expressAsyncHandler(async (req, res) => {
+    const {
+      title,
+      abstract,
+      content,
+      keywords,
+      authorName,
+      category,
+      resourceType,
+      publisher,
+      access,
+    } = req.body;
 
-        if (!title) {
-            res.status(400).send({ message: 'Title is required' });
-            return;
-        }
+    if (!title) {
+      return res.status(400).send({ message: 'Title is required' });
+    }
 
-        const newResource = {
-            title,
-            abstract,
-            content,
-            keywords,
-            authorName,
-            category,
-            resourceType,
-            publisher,
-            access,
-        };
+    if (!Array.isArray(access) || access.length === 0) {
+      return res.status(400).send({ message: 'Access must be a non-empty array' });
+    }
 
-        const dbRes = await Resource.create(newResource);
+    const allowedAccess = ['Student', 'Faculty', 'Public'];
+    const isValidAccess = access.every((role) => allowedAccess.includes(role));
 
-        res.status(201).send({
-            message: 'Resource added successfully',
-            payload: dbRes,
-        });
-    })
+    if (!isValidAccess) {
+      return res.status(400).send({ message: 'Invalid access values provided' });
+    }
+
+    const newResource = {
+      title,
+      abstract,
+      content,
+      keywords,
+      authorName,
+      category,
+      resourceType,
+      publisher,
+      access,
+    };
+
+    const dbRes = await Resource.create(newResource);
+
+    res.status(201).send({
+      message: 'Resource added successfully',
+      payload: dbRes,
+    });
+  })
 );
+
 
 // //   ////////////////
 // // PUT: Update a resource by ID
