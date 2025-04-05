@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useResources } from "../context/ResourceContext"; // update path as needed
 
 export default function AdvancedSearch() {
+  const { resources } = useResources();
+
   const [filters, setFilters] = useState({
     keywords: "",
     author: "",
@@ -12,6 +15,8 @@ export default function AdvancedSearch() {
     searchIn: "all",
     sortBy: "relevance",
   });
+
+  const [results, setResults] = useState([]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -28,10 +33,47 @@ export default function AdvancedSearch() {
       searchIn: "all",
       sortBy: "relevance",
     });
+    setResults([]);
   };
 
   const handleSearch = () => {
-    console.log("Search filters:", filters);
+    let filtered = resources.filter((res) => {
+      const keyword = filters.keywords.toLowerCase();
+
+      const fieldContent = (field) => (res[field] || "").toLowerCase();
+
+      const matchKeyword = () => {
+        if (!keyword) return true;
+
+        if (filters.searchIn === "all") {
+          return (
+            fieldContent("title").includes(keyword) ||
+            fieldContent("abstract").includes(keyword) ||
+            fieldContent("fullText").includes(keyword)
+          );
+        }
+
+        return fieldContent(filters.searchIn).includes(keyword);
+      };
+
+      return (
+        matchKeyword() &&
+        (!filters.author || fieldContent("author").includes(filters.author.toLowerCase())) &&
+        (!filters.resourceType || res.resourceType === filters.resourceType) &&
+        (!filters.category || res.category === filters.category) &&
+        (!filters.publisher || res.publisher === filters.publisher) &&
+        (!filters.publicationYear || res.publicationYear === filters.publicationYear)
+      );
+    });
+
+    if (filters.sortBy === "newest") {
+      filtered.sort((a, b) => b.publicationYear - a.publicationYear);
+    } else if (filters.sortBy === "oldest") {
+      filtered.sort((a, b) => a.publicationYear - b.publicationYear);
+    }
+
+    setResults(filtered);
+    console.log("Filtered Results:", filtered);
   };
 
   return (
@@ -67,8 +109,10 @@ export default function AdvancedSearch() {
         >
           <option value="">Select a resource type</option>
           <option value="book">Book</option>
-          <option value="journal">Journal</option>
+          <option value="textbook">TextBook</option>
+          <option value="thesis">Thesis</option>
           <option value="research-paper">Research Paper</option>
+          <option value="conference-paper">Conference Paper</option>
         </select>
 
         <select
@@ -78,9 +122,14 @@ export default function AdvancedSearch() {
           onChange={handleChange}
         >
           <option value="">Select a category</option>
-          <option value="science">Science</option>
-          <option value="technology">Technology</option>
-          <option value="history">History</option>
+          <option value="computer-science">Computer Science</option>
+          <option value="environmental-science">Environmental Science</option>
+          <option value="physics">Physics</option>
+          <option value="economics">Economics</option>
+          <option value="healthcare">Health care</option>
+          <option value="biology">Biology</option>
+          <option value="mathematics">Mathematics</option>
+          <option value="engineering">Engineering</option>
         </select>
 
         <select
@@ -90,8 +139,14 @@ export default function AdvancedSearch() {
           onChange={handleChange}
         >
           <option value="">Select a publisher</option>
-          <option value="oxford">Oxford</option>
+          <option value="ieee">IEEE</option>
           <option value="springer">Springer</option>
+          <option value="elsivier">Elsivier</option>
+          <option value="nature">Nature</option>
+          <option value="science">Science</option>
+          <option value="acm">ACM</option>
+          <option value="whiley">Whiley</option>
+          <option value="mit-press">MIT press</option>
         </select>
 
         <select
@@ -107,11 +162,10 @@ export default function AdvancedSearch() {
         </select>
       </div>
 
-      {/* Search Scope (Radio Buttons) */}
       <div className="mt-4">
         <h3 className="text-lg font-semibold">Search In</h3>
         <div className="flex flex-col gap-2">
-          {["all", "title", "abstract", "full"].map((option) => (
+          {["all", "title", "abstract", "fullText"].map((option) => (
             <label key={option} className="flex items-center gap-2">
               <input
                 type="radio"
@@ -126,7 +180,6 @@ export default function AdvancedSearch() {
         </div>
       </div>
 
-      {/* Sort By */}
       <select
         name="sortBy"
         className="mt-4 p-2 rounded bg-gray-800 text-white w-full"
@@ -138,7 +191,6 @@ export default function AdvancedSearch() {
         <option value="oldest">Oldest First</option>
       </select>
 
-      {/* Buttons */}
       <div className="flex justify-between mt-4">
         <button className="p-2 bg-gray-700 rounded text-white" onClick={clearFilters}>
           Clear Filters
@@ -151,6 +203,21 @@ export default function AdvancedSearch() {
           Search
         </button>
       </div>
+
+      {results.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-xl font-bold mb-2">Search Results</h3>
+          <ul className="space-y-4">
+            {results.map((res) => (
+              <li key={res.id} className="bg-gray-800 p-4 rounded">
+                <h4 className="text-lg font-semibold">{res.title}</h4>
+                <p className="text-sm text-gray-400">{res.author} • {res.publicationYear}</p>
+                <p className="mt-1 text-gray-300">{res.abstract}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

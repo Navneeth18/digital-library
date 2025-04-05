@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import SidebarWithFilters from "../components/SidebarWithFilter";
 import ResourceCard from "../components/ResourceCard";
+import FilteredResourceExplorer from "../components/FilteredResourceExplore";
 
 const resources = [
   {
@@ -89,13 +90,14 @@ function BrowseResource() {
           {/* <Navbar /> */}
           <BrowseHeader />
           <div className="flex">
-            <SidebarWithFilters />
+            {/* <SidebarWithFilters /> */}
 
-            <div className="mx-4">
+            {/* <div className="mx-4">
               {resources.map((res, index) => (
                 <ResourceCard key={index} resource={res} />
               ))}
-            </div>
+            </div> */}
+            <FilteredResourceExplorer/>
           </div>
         </div>
       </div>
