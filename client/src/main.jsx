@@ -10,9 +10,10 @@ import Dashboard from "./pages/Dashboard";
 import BrowseResource from "./pages/BrowseResource";
 import SearchPage from "./pages/SearchPage";
 import RequestMaterial from "./pages/RequestMaterial";
-import ViewDetails from "./pages/ViewDetails";
+// import ViewDetails from "./pages/ViewDetails";
 import AuthForm from "./pages/AuthForm";
 import RootLayout from "./components/RootLayout";
+import ViewResource from "./components/ViewResource";
 
 const browserObj = createBrowserRouter([
   {
@@ -20,10 +21,14 @@ const browserObj = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { path: "/", element: <Dashboard /> },
-      { path: "/browse-resource", element: <BrowseResource /> },
+      { path: "/browse-resource", element: <BrowseResource />
+        // children: [{
+        //   path: "/view-details", element: <ViewResource/>
+        // }]
+       },
       { path: "/search", element: <SearchPage /> },
       { path: "/request-material", element: <RequestMaterial /> },
-      { path: "/view-details", element: <ViewDetails /> },
+      // { path: "/view-details", element: <ViewResource/> },
       { path: "/auth", element: <AuthForm /> },
     ],
   },

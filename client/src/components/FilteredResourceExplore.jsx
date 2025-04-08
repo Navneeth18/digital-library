@@ -1,25 +1,5 @@
-import React, { useState } from "react";
-
-const resources = [
-  {
-    title: "Advances in Machine Learning: A Comprehensive Survey",
-    authors: "J. Smith, A. Johnson",
-    publisher: "IEEE Transactions on Neural Networks",
-    date: "2023-04-15",
-    tags: ["Research Paper", "Computer Science"],
-    description:
-      "This paper provides a comprehensive survey of recent advances in machine learning, focusing on deep learning, reinforcement learning, and their applications.",
-  },
-  {
-    title: "Sustainable Energy Solutions for Urban Development",
-    authors: "M. Garcia, L. Chen",
-    publisher: "Journal of Environmental Engineering",
-    date: "2023-04-10",
-    tags: ["Research Paper", "Environmental Science"],
-    description:
-      "The study explores sustainable energy systems tailored for urban environments, including solar, wind, and smart grid integration.",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { useResources } from "../context/ResourceContext"; // Import the custom hook to access the context
 
 const categories = [
   "Computer Science",
@@ -37,6 +17,7 @@ const types = ["Research Paper", "Book", "Textbook", "Thesis", "Conference Paper
 const publishers = ["IEEE", "Springer", "Elsevier", "Nature", "Science", "ACM", "Wiley", "MIT Press"];
 
 const FilteredResourceExplorer = () => {
+  const { resources, loading } = useResources(); // Get resources and loading state from context
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
@@ -51,6 +32,7 @@ const FilteredResourceExplorer = () => {
   const filteredResources = resources
     .filter((res) => {
       const lowerSearch = search.toLowerCase();
+      console.log(res);
       return (
         res.title.toLowerCase().includes(lowerSearch) ||
         res.authors.toLowerCase().includes(lowerSearch) ||
@@ -59,11 +41,11 @@ const FilteredResourceExplorer = () => {
     })
     .filter((res) =>
       selectedCategories.length
-        ? selectedCategories.some((cat) => res.tags.includes(cat))
+        ? selectedCategories.some((cat) => res.category?.includes(cat))
         : true
     )
     .filter((res) =>
-      selectedTypes.length ? selectedTypes.some((type) => res.tags.includes(type)) : true
+      selectedTypes.length ? selectedTypes.some((type) => res.resourceType?.includes(type)) : true
     )
     .filter((res) =>
       selectedPublishers.length
@@ -82,17 +64,21 @@ const FilteredResourceExplorer = () => {
       }
     });
 
+  if (loading) {
+    return <p>Loading resources...</p>; // Show loading state while resources are being fetched
+  }
+
   return (
-    <div className="flex h-screen bg-[#0d0d0d] text-white">
+    <div className="flex h-screen w-full bg-[#0d0d0d] text-white">
       <div className="w-1/4 bg-[#111] border-r border-gray-700 p-4 overflow-y-auto">
-        <h3 className="font-semibold mb-2">Search</h3>
-        <input
+        {/* <h3 className="font-semibold mb-2">Search</h3> */}
+        {/* <input
           type="text"
           placeholder="Search resources..."
           className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600 text-white mb-4"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-        />
+        /> */}
 
         <h3 className="font-semibold mb-2">Categories</h3>
         <ul className="space-y-2 mb-4">
@@ -195,17 +181,17 @@ const FilteredResourceExplorer = () => {
         {filteredResources.map((resource, index) => (
           <div key={index} className="bg-[#111] border border-gray-700 p-6 rounded-lg mb-4">
             <h2 className="text-xl font-semibold mb-2">{resource.title}</h2>
-            <p className="text-sm text-gray-400 mb-1">Authors: {resource.authors}</p>
+            <p className="text-sm text-gray-400 mb-1">Authors: {resource.authorName}</p>
             <p className="text-sm text-gray-400 mb-1">Journal/Publisher: {resource.publisher}</p>
-            <p className="text-sm text-gray-400 mb-3">Date: {resource.date}</p>
+            <p className="text-sm text-gray-400 mb-3">Date: {resource.updatedAt}</p>
             <div className="flex gap-2 mb-3">
-              {resource.tags.map((tag) => (
+              {(resource.keywords || []).map((tag) => (
                 <span key={tag} className="bg-gray-700 text-sm px-2 py-1 rounded">
                   {tag}
                 </span>
               ))}
             </div>
-            <p className="text-sm mb-4">{resource.description}</p>
+            <p className="text-sm mb-4">{resource.abstract}</p>
             <button className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 transition">
               View Details
             </button>

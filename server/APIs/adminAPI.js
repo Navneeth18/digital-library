@@ -116,25 +116,32 @@ adminApp.put(
 //   /////////////
 // PUT: Soft delete a resource by ID (set isActive to false)
 adminApp.put(
-    '/resource/delete/:id',
-    expressAsyncHandler(async (req, res) => {
-        const { id } = req.params;
+  '/delete/:id',
+  expressAsyncHandler(async (req, res) => {
+      const { id } = req.params;
+      const { isActive } = req.body; // Get the isActive status from the request body
 
-        const updatedRes = await Resource.findByIdAndUpdate(
-            id,
-            { isActive: false, dateModified: new Date() },
-            { new: true }
-        );
+      // Check if the isActive field is provided
+      if (isActive === undefined) {
+          return res.status(400).send({ message: 'isActive status must be provided' });
+      }
 
-        if (!updatedRes) {
-            return res.status(404).send({ message: 'Resource not found' });
-        }
+      const updatedRes = await Resource.findByIdAndUpdate(
+          id,
+          { isActive, dateModified: new Date() },
+          { new: true }
+      );
 
-        res.status(200).send({
-            message: 'Resource soft-deleted successfully (isActive set to false)',
-            payload: updatedRes
-        });
-    })
+      if (!updatedRes) {
+          return res.status(404).send({ message: 'Resource not found' });
+      }
+
+      // Send success response with updated resource
+      res.status(200).send({
+          message: `Resource ${isActive ? 'restored' : 'soft-deleted'} successfully`,
+          payload: updatedRes
+      });
+  })
 );
 
 // 
@@ -152,7 +159,7 @@ adminApp.get(
 
 // 
 adminApp.put(
-    '/resource-requests/:id/status',
+    '/resource-requests/:id',
     expressAsyncHandler(async (req, res) => {
       const { status } = req.body;
       const validStatuses = ['Pending', 'Approved', 'Rejected'];

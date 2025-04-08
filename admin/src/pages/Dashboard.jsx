@@ -8,7 +8,7 @@ import {
 
 const Dashboard = () => {
   return (
-    <div className="w-3/4 p-6 bg-[#1212128A] text-white min-h-screen space-y-6">
+    <div className="w-3/4 p-6 bg-black text-white min-h-screen space-y-6">
       {/* Header */}
       <div>
         <h2 className="text-3xl font-bold">Dashboard</h2>
@@ -35,7 +35,7 @@ const Dashboard = () => {
 // Components
 
 const StatCard = ({ icon, title, value, sub }) => (
-  <div className="bg-[#1e1e1e] p-4 rounded-lg border border-gray-700">
+  <div className="bg-black p-4 rounded-lg border border-gray-700">
     <div className="flex items-center justify-between mb-2">
       <h3 className="text-sm text-gray-300">{title}</h3>
       {icon}
@@ -46,7 +46,7 @@ const StatCard = ({ icon, title, value, sub }) => (
 );
 
 const RecentActivity = () => (
-  <div className="bg-[#1e1e1e] p-4 rounded-lg border border-gray-700">
+  <div className="bg-black p-4 rounded-lg border border-gray-700">
     <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
     <p className="text-sm text-gray-400 mb-4">Latest actions in your digital library</p>
     <ul className="space-y-3 text-sm">
@@ -70,7 +70,7 @@ const ActivityItem = ({ title, subtitle, time }) => (
 );
 
 const PopularResources = () => (
-  <div className="bg-[#1e1e1e] p-4 rounded-lg border border-gray-700">
+  <div className="bg-black p-4 rounded-lg border border-gray-700">
     <h3 className="text-lg font-semibold mb-2">Popular Resources</h3>
     <p className="text-sm text-gray-400 mb-4">Most accessed resources this month</p>
     <ol className="space-y-3 text-sm list-decimal list-inside">

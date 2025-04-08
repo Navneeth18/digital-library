@@ -28,7 +28,7 @@ const ResourceCardd = () => {
       </div>
       
       {/* Action Buttons */}
-      <div className="flex gap-4 mt-6">
+      {/* <div className="flex gap-4 mt-6">
         <button className="bg-gray-800 p-2 rounded-lg flex items-center gap-2 hover:bg-gray-600">
           📄 View Full Text
         </button>
@@ -38,7 +38,7 @@ const ResourceCardd = () => {
         <button className="bg-gray-800 p-2 rounded-lg flex items-center gap-2 hover:bg-gray-600">
           🔗 Share
         </button>
-      </div>
+      </div> */}
       
       {/* Tabs Section */}
       <div className="flex mt-6 border-b border-gray-700">

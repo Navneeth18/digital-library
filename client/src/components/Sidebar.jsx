@@ -42,10 +42,10 @@ const Sidebar = () => {
           <span>Discussion Forums</span>
         </div>
 
-        <div className="flex items-center space-x-3 text-gray-400 hover:text-white cursor-pointer" onClick={()=> {navigate("profile")}}>
+        {/* <div className="flex items-center space-x-3 text-gray-400 hover:text-white cursor-pointer" onClick={()=> {navigate("profile")}}>
           <FaCog />
           <span>Profile</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Bottom Help Box */}

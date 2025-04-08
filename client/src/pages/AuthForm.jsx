@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../context/userContext';
+import { useUser } from '../context/UserContext';
 
 const AuthForm = () => {
   const navigate = useNavigate();
@@ -15,45 +15,39 @@ const AuthForm = () => {
     role: 'user',
   });
 
-  // useEffect(() => {
-  //   const fetchPublicResources = async () => {
-  //     try {
-  //       const { data } = await axios.get('http://localhost:3000/api/resource/public');
-  //       console.log('Resources for public:', data.payload);
-  //     } catch (err) {
-  //       console.error('Error loading public resources:', err);
-  //     }
-  //   };
-
-  //   // Only run if not signed in (initial screen)
-  //   if (!user) fetchPublicResources();
-  // }, [user]);
-
+  // Handle form data change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission for login or registration
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate password length for sign-up
     if (!isSignIn && formData.password.length < 6) {
       alert('Password must be at least 6 characters long.');
       return;
     }
 
     try {
+      // Define the URL based on whether it's sign-in or sign-up
       const url = isSignIn
         ? 'http://localhost:3000/api/user/login'
         : 'http://localhost:3000/api/user/register';
 
+      // Prepare the payload for login or sign-up
       const payload = isSignIn
         ? { userId: formData.userId, password: formData.password }
         : formData;
 
+      // Send request to the backend
       const { data } = await axios.post(url, payload);
       alert(`${isSignIn ? 'Login' : 'Signup'} Successful`);
+      console.log(data);
 
       if (!isSignIn) {
+        // Reset the form for sign-up after successful registration
         setIsSignIn(true);
         setFormData({
           userId: '',
@@ -63,24 +57,12 @@ const AuthForm = () => {
           role: 'user',
         });
       } else {
-        login(data.user);
-        login_token(data.token);
+        // Store the token and user data on successful login
+        localStorage.setItem('token', data.token); // Store token in localStorage
+        login(data.user); // Store user in context
+        login_token(data.token); // Store token in context
 
-        // try {
-        //   const role = data.user.role;
-        //   const resourceUrl = `http://localhost:3000/api/resource/${role.toLowerCase()}`;
-
-        //   const res = await axios.get(resourceUrl, {
-        //     headers: {
-        //       Authorization: `Bearer ${data.token}`,
-        //     },
-        //   });
-
-        //   console.log(`Resources for ${role}:`, res.data.payload);
-        // } catch (resourceError) {
-        //   console.error('Error fetching role-based resources:', resourceError);
-        // }
-
+        // Navigate to the home page after login
         navigate('/');
       }
     } catch (err) {
@@ -89,8 +71,11 @@ const AuthForm = () => {
   };
 
   return (
+    <div className="flex justify-center pt-[80px]" style={{ width: '150vh',  }}> 
+
+    
     <div
-      className="min-h-screen bg-cover bg-center flex items-center justify-center text-white"
+      className="min-h-screen bg-cover bg-center text-white"
       style={{ backgroundImage: "url('/images/library-dark.jpg')" }}
     >
       <form
@@ -172,6 +157,7 @@ const AuthForm = () => {
           </button>
         </p>
       </form>
+    </div>
     </div>
   );
 };

@@ -12,7 +12,7 @@ function RootLayout() {
             <div className="flex min-h-screen bg-black">
                 <Sidebar />
 
-                <div className="">
+                <div className="" style={{ width: "100%" }}>
                     <Outlet />
                     {/* <Dashboard /> */}
                 </div>

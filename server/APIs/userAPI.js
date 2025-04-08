@@ -49,6 +49,7 @@ userApp.post(
 // POST: Login a user
 userApp.post(
     '/login',
+
     expressAsyncHandler(async (req, res) => {
       const { userId, password } = req.body;
   
@@ -85,6 +86,7 @@ userApp.post(
 //   
 userApp.post(
     '/resource-request',
+    authenticate,
     expressAsyncHandler(async (req, res) => {
       const {
         title,
@@ -121,6 +123,22 @@ userApp.post(
       res.status(201).send({
         message: 'Resource request submitted successfully',
         payload: newRequest
+      });
+    })
+  );
+
+  // GET: Fetch all resource requests by user
+  userApp.get(
+    '/resource-request/:userId',
+    authenticate,
+    expressAsyncHandler(async (req, res) => {
+      const { userId } = req.params;
+  
+      const requests = await ResourceRequest.find({ requestedById: userId }).sort({ createdTime: -1 });
+  
+      res.status(200).send({
+        message: 'Fetched all resource requests by user successfully',
+        payload: requests
       });
     })
   );

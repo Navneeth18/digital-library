@@ -6,7 +6,7 @@ import AdvancedSearch from '../components/AdvancedSearch'
 
 function SearchPage() {
   return (
-    <div>
+    <div className='flex ml-[260px]'>
         <div className="flex min-h-screen bg-black">
         {/* <Sidebar /> */}
         <div className="flex-1 flex flex-col">

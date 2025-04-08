@@ -12,7 +12,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="w-1/6 h-screen bg-[#1A1A1A7B] text-white flex flex-col justify-between border-r border-gray-600">
+    <div className="w-1/6 h-screen bg-black text-white flex flex-col justify-between border-r border-gray-600">
       {/* Header */}
       <div className="p-6">
         <div className="flex items-center gap-2 mb-8">
@@ -49,7 +49,7 @@ const Sidebar = () => {
       </div>
 
       {/* User Info */}
-      <div className="bg-[#141414] px-6 py-4 border-t border-gray-600 flex items-center gap-3">
+      <div className="bg-black px-6 py-4 border-t border-gray-600 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-semibold">
           A
         </div>

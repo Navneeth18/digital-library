@@ -83,7 +83,7 @@ const resources = [
 
 function BrowseResource() {
   return (
-    <div>
+    <div className="">
       <div className="flex min-h-screen bg-black">
         {/* <Sidebar /> */}
         <div className="flex-1 flex flex-col">
